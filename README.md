@@ -182,16 +182,3 @@ chmod +x Web3-Ops-Center-Linux-x64.AppImage
 2. **官方下载**: 只从官方 GitHub Releases 下载
 3. **验证哈希**: 下载后可验证文件完整性
 4. **开源审计**: 源代码完全开源，可自行审计
-
----
-
-## 技术支持
-
-- **GitHub Issues**: <https://github.com/peak-xiong/web3-ops-center/issues>
-- **文档**: <https://github.com/peak-xiong/web3-ops-center/tree/main/docs>
-
----
-
-## 更新日志
-
-查看 [CHANGELOG.md](./CHANGELOG.md) 了解版本更新历史。
