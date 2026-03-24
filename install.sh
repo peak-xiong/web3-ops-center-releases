@@ -142,7 +142,17 @@ download_installer() {
 
 	echo "  Downloading from: ${DOWNLOAD_URL}"
 
-	if ! curl --retry 3 --retry-delay 2 --retry-all-errors -fsSL -o "${INSTALLER_PATH}" "${DOWNLOAD_URL}"; then
+	# Resume partially downloaded files when the network is unstable.
+	if ! curl \
+		--continue-at - \
+		--retry 5 \
+		--retry-delay 2 \
+		--retry-all-errors \
+		--connect-timeout 15 \
+		--max-time 1800 \
+		-fsSL \
+		-o "${INSTALLER_PATH}" \
+		"${DOWNLOAD_URL}"; then
 		print_error "Failed to download installer. Please check if releases are available at:\n  https://github.com/${REPO}/releases"
 	fi
 
