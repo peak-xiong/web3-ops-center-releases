@@ -10,6 +10,8 @@ Web3 运营中心桌面应用发布仓库。
 curl -fsSL https://raw.githubusercontent.com/peak-xiong/web3-ops-center-releases/main/install.sh | bash
 ```
 
+说明：macOS 安装脚本会下载统一的 `universal` 安装包，同时兼容 Intel 和 Apple Silicon。
+
 ### Windows (PowerShell)
 
 ```powershell
@@ -22,7 +24,7 @@ irm https://raw.githubusercontent.com/peak-xiong/web3-ops-center-releases/main/i
 
 | 平台 | 文件格式 | 架构 |
 |------|----------|------|
-| macOS | `.dmg` | Intel (x64) / Apple Silicon (arm64) |
+| macOS | `.dmg` | universal（同时兼容 Intel / Apple Silicon） |
 | Windows | `.exe` | x64 / arm64 |
 | Linux | `.deb` / `.AppImage` | x64 / arm64 |
 

@@ -41,6 +41,16 @@ print_success() {
 	echo -e "${GREEN}✔${NC} $1"
 }
 
+build_download_url() {
+	local file_name="$1"
+
+	if [[ ${LATEST_RELEASE} == "latest" ]]; then
+		echo "https://github.com/${REPO}/releases/latest/download/${file_name}"
+	else
+		echo "https://github.com/${REPO}/releases/download/${LATEST_RELEASE}/${file_name}"
+	fi
+}
+
 # Detect OS and architecture
 detect_platform() {
 	OS="$(uname -s)"
@@ -108,7 +118,7 @@ download_installer() {
 	case "${PLATFORM}" in
 	mac)
 		FILE_PLATFORM="macOS"
-		FILE_ARCH="${ARCH_SUFFIX}" # arm64 or x64
+		FILE_ARCH="universal"
 		;;
 	linux)
 		FILE_PLATFORM="Linux"
@@ -124,13 +134,7 @@ download_installer() {
 
 	# Construct filename: Web3.Ops.Center-{Platform}-{Arch}.{ext}
 	local FILE_NAME="Web3.Ops.Center-${FILE_PLATFORM}-${FILE_ARCH}.${EXTENSION}"
-
-	# Construct download URL
-	if [[ ${LATEST_RELEASE} == "latest" ]]; then
-		DOWNLOAD_URL="https://github.com/${REPO}/releases/latest/download/${FILE_NAME}"
-	else
-		DOWNLOAD_URL="https://github.com/${REPO}/releases/download/${LATEST_RELEASE}/${FILE_NAME}"
-	fi
+	DOWNLOAD_URL="$(build_download_url "${FILE_NAME}")"
 
 	# Create temp directory
 	TEMP_DIR=$(mktemp -d)
