@@ -142,7 +142,7 @@ download_installer() {
 
 	echo "  Downloading from: ${DOWNLOAD_URL}"
 
-	if ! curl -fsSL -o "${INSTALLER_PATH}" "${DOWNLOAD_URL}"; then
+	if ! curl --retry 3 --retry-delay 2 --retry-all-errors -fsSL -o "${INSTALLER_PATH}" "${DOWNLOAD_URL}"; then
 		print_error "Failed to download installer. Please check if releases are available at:\n  https://github.com/${REPO}/releases"
 	fi
 
@@ -154,10 +154,15 @@ install_macos() {
 	print_step "Installing on macOS..."
 
 	# Mount DMG
-	MOUNT_POINT=$(hdiutil attach "${INSTALLER_PATH}" -nobrowse -quiet | grep -o '/Volumes/.*')
+	local attach_output
+	if ! attach_output=$(hdiutil attach "${INSTALLER_PATH}" -nobrowse -readonly 2>&1); then
+		print_error "Failed to mount DMG:\n${attach_output}"
+	fi
+
+	MOUNT_POINT=$(echo "${attach_output}" | grep -Eo '/Volumes/.*' | head -1)
 
 	if [[ -z ${MOUNT_POINT} ]]; then
-		print_error "Failed to mount DMG"
+		print_error "Failed to determine mounted volume from hdiutil output:\n${attach_output}"
 	fi
 
 	# Find and copy .app
